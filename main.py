@@ -1,4 +1,5 @@
 import fire
+from colorama import Fore, Style
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
 from analytics import streak_calc, habits_filter, generate_summary_report
@@ -14,7 +15,7 @@ class HabitTrackerCLI:
         habit = create_habit(name, description, datetime.fromisoformat(start_date), periodicity)
         self.habit_list.append(habit)
         save_info(self.habit_list, self.file_path)
-        print(f"Habit '{name}' created successfully")
+        print(Fore.GREEN + f"Habit {Fore.YELLOW + name + Fore.GREEN} created successfully" + Style.RESET_ALL)
 
     def edit(self, habit_name, name=None, description=None, start_date=None, periodicity=None):
         '''Edit a habit with the given name, description, start date, and periodicity.'''
@@ -24,9 +25,9 @@ class HabitTrackerCLI:
                 start_date = datetime.fromisoformat(start_date)
             edit_habit(habit, name=name, description=description, start_date=start_date, periodicity=periodicity)
             save_info(self.habit_list, self.file_path)
-            print(f"Habit '{habit_name}' edited successfully")
+            print(Fore.GREEN + f"Habit '{habit_name}' edited successfully")
         else:
-            print(f"Habit '{habit_name}' not found")
+            print(Fore.RED + f"Habit '{habit_name}' not found")
 
     def delete(self, habit_name):
         '''Delete a habit with the given name.'''
@@ -34,17 +35,17 @@ class HabitTrackerCLI:
         if habit:
             delete_habit(self.habit_list, habit)
             save_info(self.habit_list, self.file_path)
-            print(f"Habit '{habit_name}' deleted successfully")
+            print(Fore.GREEN + f"Habit '{habit_name}' deleted successfully")
         else:
-            print(f"Habit '{habit_name}' not found")
+            print(Fore.RED + f"Habit '{habit_name}' not found")
 
     def streak(self, habit_name):
         '''Get the current streak for a habit with the given name.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            print(f"Current streak for habit '{habit_name}': {streak_calc(habit)}")
+            print(Fore.YELLOW + f"Current streak for habit '{habit_name}': {streak_calc(habit)}")
         else:
-            print(f"Habit '{habit_name}' not found")
+            print(Fore.RED + f"Habit '{habit_name}' not found")
 
     def filter(self, periodicity):
         '''Filter habits by periodicity and print them.'''
@@ -56,7 +57,7 @@ class HabitTrackerCLI:
         '''Generate a summary report of all habits and print it.'''
         report = generate_summary_report(self.habit_list)
         for habit_report in report:
-            print(f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
+            print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
 
 if __name__ == "__main__":
     fire.Fire(HabitTrackerCLI)
