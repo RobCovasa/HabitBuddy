@@ -12,10 +12,13 @@ class HabitTrackerCLI:
 
     def create(self, name, description, start_date, periodicity):
         '''Create a new habit with the given name, description, start date, and periodicity.'''
-        habit = create_habit(name, description, datetime.fromisoformat(start_date), periodicity)
-        self.habit_list.append(habit)
-        save_info(self.habit_list, self.file_path)
-        print(Fore.GREEN + f"Habit {Fore.YELLOW + name + Fore.GREEN} created successfully" + Style.RESET_ALL)
+        if periodicity not in ['daily', 'weekly']:
+            print(f"{Fore.RED}Invalid periodicity. Supported values are: 'daily' and 'weekly'.{Style.RESET_ALL}")
+        else:
+            habit = create_habit(name, description, datetime.fromisoformat(start_date), periodicity)
+            self.habit_list.append(habit)
+            save_info(self.habit_list, self.file_path)
+            print(f"{Fore.GREEN}Habit {Fore.YELLOW}{name}{Fore.GREEN} created successfully{Style.RESET_ALL}")
 
     def edit(self, habit_name, name=None, description=None, start_date=None, periodicity=None):
         '''Edit a habit with the given name, description, start date, and periodicity.'''
@@ -25,9 +28,9 @@ class HabitTrackerCLI:
                 start_date = datetime.fromisoformat(start_date)
             edit_habit(habit, name=name, description=description, start_date=start_date, periodicity=periodicity)
             save_info(self.habit_list, self.file_path)
-            print(Fore.GREEN + f"Habit '{habit_name}' edited successfully")
+            print(f"{Fore.GREEN}Habit {Fore.CYAN}'{habit_name}'{Fore.GREEN} edited successfully{Style.RESET_ALL}")
         else:
-            print(Fore.RED + f"Habit '{habit_name}' not found")
+            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def delete(self, habit_name):
         '''Delete a habit with the given name.'''
@@ -35,17 +38,17 @@ class HabitTrackerCLI:
         if habit:
             delete_habit(self.habit_list, habit)
             save_info(self.habit_list, self.file_path)
-            print(Fore.GREEN + f"Habit '{habit_name}' deleted successfully")
+            print(f"{Fore.GREEN}Habit {Fore.CYAN}{habit_name}{Fore.GREEN} deleted successfully{Style.RESET_ALL}")
         else:
-            print(Fore.RED + f"Habit '{habit_name}' not found")
+            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def streak(self, habit_name):
         '''Get the current streak for a habit with the given name.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            print(Fore.YELLOW + f"Current streak for habit '{habit_name}': {streak_calc(habit)}")
+            print(f"{Fore.YELLOW}Current streak for habit '{habit_name}': {streak_calc(habit)}{Style.RESET_ALL}")
         else:
-            print(Fore.RED + f"Habit '{habit_name}' not found")
+            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def filter(self, periodicity):
         '''Filter habits by periodicity and print them.'''
