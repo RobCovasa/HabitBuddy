@@ -22,9 +22,9 @@ class HabitTrackerCLI:
             return
 
         try:
-            start_date = datetime.fromisoformat(start_date)
+            start_date = datetime.fromisoformat(start_date) # Check if the date is valid
         except ValueError:
-            print(f"{Fore.RED}Invalid start date. Valid date format: 'YYYY-MM-DD'.{Style.RESET_ALL}")
+            print(f"{Fore.RED}Invalid start date. Valid date format: 'YYYY-MM-DD'.{Style.RESET_ALL}") # If not, print an error message
             return
 
         habit = create_habit(name, description, start_date, periodicity)
