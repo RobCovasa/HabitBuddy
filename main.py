@@ -12,6 +12,10 @@ class HabitTrackerCLI:
 
     def create(self, name, description, start_date, periodicity):
         '''Create a new habit with the given name, description, start date, and periodicity.'''
+        existing_habit = get_habit_by_name(self.habit_list, name)
+        if existing_habit:
+            print(f"{Fore.RED}A habit with the name {Fore.YELLOW}{name}{Fore.RED} already exists. Choose a different name.{Style.RESET_ALL}")
+            return
         if periodicity not in ['daily', 'weekly']:
             print(f"{Fore.RED}Invalid periodicity. Supported values are: 'daily' and 'weekly'.{Style.RESET_ALL}")
         else:
