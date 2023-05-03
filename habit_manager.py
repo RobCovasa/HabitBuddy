@@ -9,9 +9,11 @@ class Habit:
         self.periodicity = periodicity
         self.completions = [] # Creates an empty list of completions for the habit
         
-    def complete_habit(self):
+    def complete_habit(self, completion_datetime=None):
         '''Add a completion to the habit.'''
-        self.completions.append(datetime.now())
+        if completion_datetime is None:
+            completion_datetime = datetime.now()
+        self.completions.append(completion_datetime)
 
     def to_dictionary(self):
         '''Return a dictionary representation of the habit.'''
