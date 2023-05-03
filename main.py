@@ -61,6 +61,21 @@ class HabitTrackerCLI:
         report = generate_summary_report(self.habit_list)
         for habit_report in report:
             print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
+            
+    def complete(self, habit_name, completion_datetime=None):
+        '''Mark a habit as complete.'''
+        habit = get_habit_by_name(self.habit_list, habit_name)
+        if habit:
+            if completion_datetime:
+                completion_datetime = datetime.fromisoformat(completion_datetime)
+            else:
+                # Default to system datetime
+                completion_datetime = datetime.now()
+            habit.complete_habit(completion_datetime)
+            save_info(self.habit_list, self.file_path)
+            print(f"{Fore.GREEN}Habit {Fore.CYAN}{habit_name}{Fore.GREEN} marked as complete{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     fire.Fire(HabitTrackerCLI)
