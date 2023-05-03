@@ -58,9 +58,13 @@ class HabitTrackerCLI:
 
     def report(self):
         '''Generate a summary report of all habits and print it.'''
-        report = generate_summary_report(self.habit_list)
-        for habit_report in report:
-            print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
+        # Check if habit list is empty
+        if not self.habit_list:
+            print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
+        else:
+            report = generate_summary_report(self.habit_list)
+            for habit_report in report:
+                print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
             
     def complete(self, habit_name, completion_datetime=None):
         '''Mark a habit as complete.'''
