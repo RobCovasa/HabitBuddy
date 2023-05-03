@@ -16,13 +16,21 @@ class HabitTrackerCLI:
         if existing_habit:
             print(f"{Fore.RED}A habit with the name {Fore.YELLOW}{name}{Fore.RED} already exists. Choose a different name.{Style.RESET_ALL}")
             return
+
         if periodicity not in ['daily', 'weekly']:
             print(f"{Fore.RED}Invalid periodicity. Supported values are: 'daily' and 'weekly'.{Style.RESET_ALL}")
-        else:
-            habit = create_habit(name, description, datetime.fromisoformat(start_date), periodicity)
-            self.habit_list.append(habit)
-            save_info(self.habit_list, self.file_path)
-            print(f"{Fore.GREEN}Habit {Fore.YELLOW}{name}{Fore.GREEN} created successfully{Style.RESET_ALL}")
+            return
+
+        try:
+            start_date = datetime.fromisoformat(start_date)
+        except ValueError:
+            print(f"{Fore.RED}Invalid start date. Valid date format: 'YYYY-MM-DD'.{Style.RESET_ALL}")
+            return
+
+        habit = create_habit(name, description, start_date, periodicity)
+        self.habit_list.append(habit)
+        save_info(self.habit_list, self.file_path)
+        print(f"{Fore.GREEN}Habit {Fore.YELLOW}{name}{Fore.GREEN} created successfully{Style.RESET_ALL}")
 
     def edit(self, habit_name, name=None, description=None, start_date=None, periodicity=None):
         '''Edit a habit with the given name, description, start date, and periodicity.'''
