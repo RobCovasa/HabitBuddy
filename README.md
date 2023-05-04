@@ -15,8 +15,12 @@ The HabitBuddy App is a user-friendly and simple-to-use program created to help 
 * Colorama for colored terminal output
 
 ## Installation
-* Clone the repository<br>
-<code>https://github.com/RobCovasa/HabitBuddy.git</code>
-* Install the required packages<br>
-<code>cd HabitBuddy
-pip install -r requirements.txt</code>
+* Clone the repository
+```
+https://github.com/RobCovasa/HabitBuddy.git
+```
+* Install the required packages
+```
+cd HabitBuddy
+pip install -r requirements.txt
+```
