@@ -43,3 +43,19 @@ def generate_summary_report(habit_list):
         "streak": streak_calc(habit),
         "total_completions": len(habit.completions)
     } for habit in habit_list]
+
+def calculate_completion_rates(habit_list):
+    completion_rates = []
+    
+    for habit in habit_list:
+        total_days = (datetime.now().date() - habit.start_date.date()).days # Calculate the total number of days since the habit was created
+        if habit.periodicity == "weekly":
+            total_days = total_days // 7
+        
+        completion_rate = (len(habit.completions) / total_days) * 100 # Calculate the completion rate as a percentage
+        completion_rates.append({
+            "habit_name": habit.name,
+            "completion_rate": completion_rate
+        })
+    
+    return completion_rates

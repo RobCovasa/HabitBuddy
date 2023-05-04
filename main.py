@@ -2,7 +2,7 @@ import fire
 from colorama import Fore, Style
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, generate_summary_report
+from analytics import streak_calc, habits_filter, generate_summary_report, calculate_completion_rates
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
@@ -77,6 +77,17 @@ class HabitTrackerCLI:
             report = generate_summary_report(self.habit_list)
             for habit_report in report:
                 print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
+                
+    def completion_rates(self):
+        '''Calculate and print the completion rates for all habits.'''
+        if not self.habit_list:
+            print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
+            return
+
+        rates = calculate_completion_rates(self.habit_list)
+        for rate in rates:
+            print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
+
             
     def complete(self, habit_name, completion_datetime=None):
         '''Mark a habit as complete.'''
