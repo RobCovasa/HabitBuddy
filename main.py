@@ -76,7 +76,7 @@ class HabitTrackerCLI:
         else:
             report = generate_summary_report(self.habit_list)
             for habit_report in report:
-                print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}")
+                print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}{Style.RESET_ALL}")
                 
     def completion_rates(self):
         '''Calculate and print the completion rates for all habits.'''
@@ -104,5 +104,36 @@ class HabitTrackerCLI:
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
+    def print_welcome_message(self):
+        print("Welcome to HabitBuddy!")
+        print("Here are the main commands:")
+        print("  help - Show information about the available commands.")
+        print("  exit - Quit the application.")
+
+    def help(self):
+        print("Available commands and their usage:")
+        print("  create <name> <description> <start_date> <periodicity> - Create a new habit.")
+        print("  edit <habit_name> [name] [description] [start_date] [periodicity] - Edit an existing habit.")
+        print("  delete <habit_name> - Delete a habit.")
+        print("  complete <habit_name> [completion_datetime] - Mark a habit as complete.")
+        print("  streak <habit_name> - Get the current streak for a habit.")
+        print("  filter <periodicity> - Filter habits by periodicity.")
+        print("  report - Generate a summary report of all habits.")
+        print("  completion_rates - Print the completion rates for all habits.")
+        print("  help - Show this help message.")
+        print("  exit - Quit the application.")
+
+    def run(self):
+        self.print_welcome_message()
+        while True:
+            command_line = input("> ")
+            if command_line.lower() == "exit":
+                break
+            try:
+                fire.Fire({cmd: getattr(self, cmd) for cmd in dir(self) if not cmd.startswith('_')}, command_line)
+            except Exception as e:
+                print(f"Error: {str(e)}")
+
 if __name__ == "__main__":
-    fire.Fire(HabitTrackerCLI)
+    cli = HabitTrackerCLI()
+    cli.run()
