@@ -36,23 +36,20 @@ def habits_filter(habit_list, periodicity):
     '''Filter habits by periodicity'''
     return [habit for habit in habit_list if habit.periodicity == periodicity]
 
-def generate_summary_report(habit_list):
-    '''Generate a summary report of all habits'''
-    return [{
-        "habit_name": habit.name,
-        "streak": streak_calc(habit),
-        "total_completions": len(habit.completions)
-    } for habit in habit_list]
-
 def calculate_completion_rates(habit_list):
+    '''Calculate the completion rates of habits'''
     completion_rates = []
     
     for habit in habit_list:
-        total_days = (datetime.now().date() - habit.start_date.date()).days # Calculate the total number of days since the habit was created
+        total_days = (datetime.now().date() - habit.start_date.date()).days
+        if total_days <= 0:
+            # Skip if the habit start date is in the future or today
+            continue
+        
         if habit.periodicity == "weekly":
             total_days = total_days // 7
         
-        completion_rate = (len(habit.completions) / total_days) * 100 # Calculate the completion rate as a percentage
+        completion_rate = (len(habit.completions) / total_days) * 100
         completion_rates.append({
             "habit_name": habit.name,
             "completion_rate": completion_rate
