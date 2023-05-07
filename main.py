@@ -1,7 +1,7 @@
 import fire
 from colorama import Fore, Style
 from prettytable import PrettyTable
-from datetime import datetime, timedelta
+from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
 from analytics import streak_calc, habits_filter, generate_summary_report, calculate_completion_rates
 from data_storage import load_info, save_info
@@ -86,13 +86,13 @@ class HabitTrackerCLI:
         table_habits.field_names = ["Habit", "Description", "Periodicity", "Streak", "Completion (Last 7)"]
 
         for habit in self.habit_list:
-            completions = habit.get_completions_in_last_n_days_or_weeks(7)
+            completions = habit.get_past_completions(7)
             circles = ""
             for completion in completions:
                 if completion:
-                    circles += f"{Fore.GREEN}●{Style.RESET_ALL}"
+                    circles += f"{Fore.GREEN}●{Style.RESET_ALL} "
                 else:
-                    circles += f"{Fore.RED}●{Style.RESET_ALL}"
+                    circles += f"{Fore.RED}●{Style.RESET_ALL} "
             
             # Add a row to the table for each habit
             table_habits.add_row([habit.name, habit.description, habit.periodicity, streak_calc(habit), circles])

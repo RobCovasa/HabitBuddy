@@ -36,7 +36,7 @@ class Habit:
         habit.completions = [datetime.fromisoformat(completion) for completion in habit_dict['completions']]
         return habit
     
-    def get_completions_in_last_n_days_or_weeks(self, n):
+    def get_past_completions(self, n): # n = number of days or weeks
         '''Return a list of completions in the last n days or weeks.'''
         completions = []
         now = datetime.now()
@@ -46,7 +46,7 @@ class Habit:
             elif self.periodicity == "weekly":
                 target_date = now - timedelta(weeks=i)
             
-            completion = any([x.date() == target_date.date() for x in self.completions])
+            completion = any([x.date() == target_date.date() for x in self.completions]) # Check completion on the target date
             completions.insert(0, completion)
         return completions
 
