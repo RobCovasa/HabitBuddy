@@ -1,6 +1,7 @@
 import fire
 from colorama import Fore, Style
-from datetime import datetime
+from prettytable import PrettyTable
+from datetime import datetime, timedelta
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
 from analytics import streak_calc, habits_filter, generate_summary_report, calculate_completion_rates
 from data_storage import load_info, save_info
@@ -44,15 +45,20 @@ class HabitTrackerCLI:
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
-    def delete(self, habit_name):
-        '''Delete a habit with the given name.'''
-        habit = get_habit_by_name(self.habit_list, habit_name)
-        if habit:
-            delete_habit(self.habit_list, habit)
-            save_info(self.habit_list, self.file_path)
-            print(f"{Fore.GREEN}Habit {Fore.CYAN}{habit_name}{Fore.GREEN} deleted successfully{Style.RESET_ALL}")
-        else:
-            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+    def delete(self, *habit_names):
+        '''Delete habits with the given name or names.'''
+        if not habit_names:
+            print(f"{Fore.RED}Provide at least one habit name to delete{Style.RESET_ALL}")
+            return
+
+        for habit_name in habit_names:
+            habit = get_habit_by_name(self.habit_list, habit_name)
+            if habit:
+                delete_habit(self.habit_list, habit)
+                save_info(self.habit_list, self.file_path)
+                print(f"{Fore.GREEN}Habit {Fore.YELLOW}{habit_name}{Fore.GREEN} deleted successfully{Style.RESET_ALL}")
+            else:
+                print(f"{Fore.RED}Habit {Fore.YELLOWs}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def streak(self, habit_name):
         '''Get the current streak for a habit with the given name.'''
@@ -66,17 +72,33 @@ class HabitTrackerCLI:
         '''Filter habits by periodicity and print them.'''
         filtered_habits = habits_filter(self.habit_list, periodicity)
         for habit in filtered_habits:
-            print(f"{habit.name} ({habit.description})")
+            print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description})")
 
     def report(self):
         '''Generate a summary report of all habits and print it.'''
         # Check if habit list is empty
         if not self.habit_list:
             print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
-        else:
-            report = generate_summary_report(self.habit_list)
-            for habit_report in report:
-                print(Fore.YELLOW + f"{habit_report['habit_name']} - Streak: {habit_report['streak']} - Total Completions: {habit_report['total_completions']}{Style.RESET_ALL}")
+            return
+
+        # Create a table with the habit data
+        table_habits = PrettyTable()
+        table_habits.field_names = ["Habit", "Description", "Periodicity", "Streak", "Completion (Last 7)"]
+
+        for habit in self.habit_list:
+            completions = habit.get_completions_in_last_n_days_or_weeks(7)
+            circles = ""
+            for completion in completions:
+                if completion:
+                    circles += f"{Fore.GREEN}●{Style.RESET_ALL}"
+                else:
+                    circles += f"{Fore.RED}●{Style.RESET_ALL}"
+            
+            # Add a row to the table for each habit
+            table_habits.add_row([habit.name, habit.description, habit.periodicity, streak_calc(habit), circles])
+
+        # Print the table
+        print(table_habits)
                 
     def completion_rates(self):
         '''Calculate and print the completion rates for all habits.'''

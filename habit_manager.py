@@ -1,5 +1,4 @@
-from datetime import datetime # Used to store completion dates
-
+from datetime import datetime, timedelta
 class Habit:
     def __init__(self, name, description, start_date, periodicity):
         '''Create a new habit.'''
@@ -36,6 +35,20 @@ class Habit:
         )
         habit.completions = [datetime.fromisoformat(completion) for completion in habit_dict['completions']]
         return habit
+    
+    def get_completions_in_last_n_days_or_weeks(self, n):
+        '''Return a list of completions in the last n days or weeks.'''
+        completions = []
+        now = datetime.now()
+        for i in range(n):
+            if self.periodicity == "daily":
+                target_date = now - timedelta(days=i)
+            elif self.periodicity == "weekly":
+                target_date = now - timedelta(weeks=i)
+            
+            completion = any([x.date() == target_date.date() for x in self.completions])
+            completions.insert(0, completion)
+        return completions
 
 def create_habit(name, description, start_date, periodicity):
     '''Creates a new habit.'''
