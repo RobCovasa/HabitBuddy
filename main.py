@@ -104,7 +104,7 @@ class HabitTrackerCLI:
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
-    def print_welcome_message(self):
+    def welcome(self):
         print("Welcome to HabitBuddy!")
         print("Here are the main commands:")
         print("  help - Show information about the available commands.")
@@ -124,7 +124,7 @@ class HabitTrackerCLI:
         print("  exit - Quit the application.")
 
     def run(self):
-        self.print_welcome_message()
+        self.welcome()
         while True:
             command_line = input("> ")
             if command_line.lower() == "exit":
