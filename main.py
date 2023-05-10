@@ -3,7 +3,7 @@ from colorama import Fore, Style
 from prettytable import PrettyTable
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, generate_summary_report, calculate_completion_rates
+from analytics import streak_calc, habits_filter, calculate_completion_rates
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
@@ -128,33 +128,33 @@ class HabitTrackerCLI:
 
     def welcome(self):
         print("Welcome to HabitBuddy!")
-        print("Here are the main commands:")
-        print("  help - Show information about the available commands.")
-        print("  exit - Quit the application.")
+        print(f"{Fore.WHITE}Here are the main commands:{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  help{Fore.WHITE} - Show information about the available commands.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}")
 
     def help(self):
-        print("Available commands and their usage:")
-        print("  create <name> <description> <start_date> <periodicity> - Create a new habit.")
-        print("  edit <habit_name> [name] [description] [start_date] [periodicity] - Edit an existing habit.")
-        print("  delete <habit_name> - Delete a habit.")
-        print("  complete <habit_name> [completion_datetime] - Mark a habit as complete.")
-        print("  streak <habit_name> - Get the current streak for a habit.")
-        print("  filter <periodicity> - Filter habits by periodicity.")
-        print("  report - Generate a summary report of all habits.")
-        print("  completion_rates - Print the completion rates for all habits.")
-        print("  help - Show this help message.")
-        print("  exit - Quit the application.")
+        print(f"{Fore.WHITE}Available commands and their usage:{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  create <name> <description> <start_date> <periodicity>{Fore.WHITE} - Create a new habit.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  edit <habit_name> [name] [description] [start_date] [periodicity]{Fore.WHITE} - Edit an existing habit.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  delete <habit_name>{Fore.WHITE} - Delete a habit.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  complete <habit_name> [completion_datetime]{Fore.WHITE} - Mark a habit as complete.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  streak <habit_name>{Fore.WHITE} - Get the current streak for a habit.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  filter <periodicity>{Fore.WHITE} - Filter habits by periodicity.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  report{Fore.WHITE} - Generate a summary report of all habits.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  completion_rates{Fore.WHITE} - Print the completion rates for all habits.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  help{Fore.WHITE} - Show this help message.{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}")
 
     def run(self):
         self.welcome()
         while True:
-            command_line = input("> ")
+            command_line = input(f"{Fore.BLUE}> {Style.RESET_ALL}")
             if command_line.lower() == "exit":
                 break
             try:
                 fire.Fire({cmd: getattr(self, cmd) for cmd in dir(self) if not cmd.startswith('_')}, command_line)
             except Exception as e:
-                print(f"Error: {str(e)}")
+                print(f"{Fore.RED}Error: {str(e)}{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     cli = HabitTrackerCLI()
