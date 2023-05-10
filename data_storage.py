@@ -13,7 +13,7 @@ def load_info(file_path):
             print(f"{Fore.GREEN}Data loaded successfully{Style.RESET_ALL}")
             return habit_list
     except (FileNotFoundError, json.JSONDecodeError): # FileNotFoundError to catch if file doesn't exist, JSONDecodeError to catch if file is empty
-        print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
+        print(f"{Fore.RED}Error: {Style.RESET_ALL} File not found or empty")
         return []
 
 def save_info(habit_list, file_path):
@@ -26,4 +26,4 @@ def save_info(habit_list, file_path):
             json.dump(data, file, indent=4) # Indent to make the file more readable
             print(f"{Fore.GREEN}Data saved successfully{Style.RESET_ALL}")
     except IOError: # IOError to catch if file is read-only
-        print(f"{Fore.RED}Error saving data{Style.RESET_ALL}")
+        print(f"{Fore.RED}Error: {Style.RESET_ALL} Saving data failed")
