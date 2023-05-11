@@ -3,7 +3,7 @@ from colorama import Fore, Style
 from prettytable import PrettyTable
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, calculate_completion_rates
+from analytics import streak_calc, habits_filter, calculate_completion_rates, longest_streak
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
@@ -109,7 +109,14 @@ class HabitTrackerCLI:
         rates = calculate_completion_rates(self.habit_list)
         for rate in rates:
             print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
-
+            
+    def longest_streak(self):
+        '''Print the longest run streak.'''
+        max_streak, max_streak_habit_name = longest_streak(self.habit_list)
+        if max_streak == 0:
+            print(f"{Fore.RED}No habits found or no streak greater than 0{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.GREEN}The habit with the longest streak is '{Fore.YELLOW}{max_streak_habit_name}{Fore.GREEN}' with a streak of {Fore.YELLOW}{max_streak}{Fore.GREEN}.{Style.RESET_ALL}")
             
     def complete(self, habit_name, completion_datetime=None):
         '''Mark a habit as complete.'''

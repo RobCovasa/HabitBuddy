@@ -56,3 +56,16 @@ def calculate_completion_rates(habit_list):
         })
     
     return completion_rates
+
+def longest_streak(habit_list):
+    '''Return the longest run streak of all defined habits.'''
+    max_streak = 0
+    max_streak_habit_name = ""
+
+    for habit in habit_list:
+        current_streak = streak_calc(habit)
+        if current_streak > max_streak:
+            max_streak = current_streak
+            max_streak_habit_name = habit.name
+
+    return max_streak, max_streak_habit_name
