@@ -13,7 +13,7 @@ The HabitBuddy App is a user-friendly and simple-to-use program created to help 
 * Python 3.6 or later
 * Fire for the command-line interface
 * Colorama for colored terminal output
-* 
+
 ## Installation
 * Clone the repository
 ```
