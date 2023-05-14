@@ -1,9 +1,8 @@
 import fire
 from colorama import Fore, Style
-from prettytable import PrettyTable
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, calculate_completion_rates, longest_streak
+from analytics import streak_calc, habits_filter, calculate_completion_rates
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
@@ -23,9 +22,16 @@ class HabitTrackerCLI:
             return
 
         try:
-            start_date = datetime.fromisoformat(start_date) # Check if the date is valid
+            if start_date.lower() == 'now':
+                start_date = datetime.now()
+            elif 'T' not in start_date: # If no time component in start_date
+                start_date = datetime.fromisoformat(start_date)
+                current_time = datetime.now().time() # Current time
+                start_date = datetime.combine(start_date.date(), current_time) # Combining date from start_date and current time
+            else:
+                start_date = datetime.fromisoformat(start_date) # If time component is present
         except ValueError:
-            print(f"{Fore.RED}Invalid start date. Valid date format: 'YYYY-MM-DD'.{Style.RESET_ALL}") # If not, print an error message
+            print(f"{Fore.RED}Invalid start date. Valid date format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:MM:SS'. Use 'now' for current date and time.{Style.RESET_ALL}")
             return
 
         habit = create_habit(name, description, start_date, periodicity)
@@ -74,32 +80,6 @@ class HabitTrackerCLI:
         for habit in filtered_habits:
             print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description})")
 
-    def report(self):
-        '''Generate a summary report of all habits and print it.'''
-        # Check if habit list is empty
-        if not self.habit_list:
-            print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
-            return
-
-        # Create a table with the habit data
-        table_habits = PrettyTable()
-        table_habits.field_names = ["Habit", "Description", "Periodicity", "Streak", "Completion (Last 7)"]
-
-        for habit in self.habit_list:
-            completions = habit.get_past_completions(7)
-            circles = ""
-            for completion in completions:
-                if completion:
-                    circles += f"{Fore.GREEN}●{Style.RESET_ALL} "
-                else:
-                    circles += f"{Fore.RED}●{Style.RESET_ALL} "
-            
-            # Add a row to the table for each habit
-            table_habits.add_row([habit.name, habit.description, habit.periodicity, streak_calc(habit), circles])
-
-        # Print the table
-        print(table_habits)
-                
     def completion_rates(self):
         '''Calculate and print the completion rates for all habits.'''
         if not self.habit_list:
@@ -109,14 +89,6 @@ class HabitTrackerCLI:
         rates = calculate_completion_rates(self.habit_list)
         for rate in rates:
             print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
-            
-    def longest_streak(self):
-        '''Print the longest run streak.'''
-        max_streak, max_streak_habit_name = longest_streak(self.habit_list)
-        if max_streak == 0:
-            print(f"{Fore.RED}No habits found or no streak greater than 0{Style.RESET_ALL}")
-        else:
-            print(f"{Fore.GREEN}The habit with the longest streak is '{Fore.YELLOW}{max_streak_habit_name}{Fore.GREEN}' with a streak of {Fore.YELLOW}{max_streak}{Fore.GREEN}.{Style.RESET_ALL}")
             
     def complete(self, habit_name, completion_datetime=None):
         '''Mark a habit as complete.'''
@@ -147,7 +119,6 @@ class HabitTrackerCLI:
         print(f"{Fore.YELLOW}  complete <habit_name> [completion_datetime]{Fore.WHITE} - Mark a habit as complete.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  streak <habit_name>{Fore.WHITE} - Get the current streak for a habit.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  filter <periodicity>{Fore.WHITE} - Filter habits by periodicity.{Style.RESET_ALL}")
-        print(f"{Fore.YELLOW}  report{Fore.WHITE} - Generate a summary report of all habits.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  completion_rates{Fore.WHITE} - Print the completion rates for all habits.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  help{Fore.WHITE} - Show this help message.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}")
