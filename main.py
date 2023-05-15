@@ -1,8 +1,8 @@
 import fire
 from colorama import Fore, Style
-from datetime import datetime
+from datetime import datetime, timedelta
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, calculate_completion_rates, get_all_habits, longest_streak_all_habits, longest_streak_single_habit
+from analytics import streak_calc, habits_filter, calculate_completion_rates, get_all_habits, calculate_longest_streak, longest_streak_all_habits
 from data_storage import load_info, save_info
 
 # Main Class for Habit Tracker Command Line Interface
@@ -80,34 +80,23 @@ class HabitTrackerCLI:
         '''Method to get the current streak for a given habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            print(f"{Fore.YELLOW}Current streak for '{habit_name}': {longest_streak_single_habit(habit)}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}Current streak for '{habit_name}': {streak_calc(habit)}{Style.RESET_ALL}")
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
-
-    def longest_streak_all(self):
-        '''Method to get the longest streak for all habits.'''
-        max_streak = 0
-        habit_with_max_streak = None
-
-        for habit in self.habit_list:
-            # Calculate the streak for the current habit
-            current_streak = streak_calc(habit)
-            # If the current streak is longer than the max streak, update the max streak and the habit with max streak
-            if current_streak > max_streak:
-                max_streak = current_streak
-                habit_with_max_streak = habit.name
-
-        return habit_with_max_streak, max_streak
-
+    
     def longest_streak(self, habit_name):
         '''Method to get the longest streak for a given habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            max_streak = streak_calc(habit)
-            return max_streak
+            longest_streak = calculate_longest_streak(habit)
+            print(f"{Fore.GREEN}Longest streak for {Fore.CYAN}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}")
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
-            return None
+            
+    def longest_streak_all(self):
+        '''Method to get the longest streak for all habits.'''
+        habit_with_max_streak, max_streak = longest_streak_all_habits(self.habit_list)
+        print(f"{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is '{habit_with_max_streak}' with a streak of {max_streak} days.{Style.RESET_ALL}")
 
     def all_habits(self):
         '''Method to print all habits.'''
