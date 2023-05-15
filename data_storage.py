@@ -3,7 +3,7 @@ from habit_manager import Habit
 from colorama import Fore, Style
 
 def load_info(file_path):
-    '''Load data from a JSON file'''
+    '''Function to load data from a JSON file.'''
     print(f"{Fore.YELLOW}{Style.BRIGHT}Loading data from file: {file_path}{Style.RESET_ALL}")
     # Catch and handle any errors that may occur during file operations
     try:
@@ -19,7 +19,7 @@ def load_info(file_path):
         return [] # Return an empty list if an error occurred
 
 def save_info(habit_list, file_path):
-    '''Save data to a JSON file'''
+    '''Function to save data to a JSON file.'''
     print(f"{Fore.GREEN}Saving data to file: {file_path}{Style.RESET_ALL}")
     # Convert each Habit object in habit_list to a dictionary using Habit.to_dictionary
     data = {"habits": [habit.to_dictionary() for habit in habit_list]}
