@@ -2,7 +2,7 @@ import fire
 from colorama import Fore, Style
 from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
-from analytics import streak_calc, habits_filter, calculate_completion_rates
+from analytics import streak_calc, habits_filter, calculate_completion_rates, get_all_habits, longest_streak_all_habits, longest_streak_single_habit
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
@@ -67,18 +67,49 @@ class HabitTrackerCLI:
                 print(f"{Fore.RED}Habit {Fore.YELLOWs}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def streak(self, habit_name):
-        '''Get the current streak for a habit with the given name.'''
+            '''Get the current streak for a habit with the given name.'''
+            habit = get_habit_by_name(self.habit_list, habit_name)
+            if habit:
+                print(f"{Fore.YELLOW}Current streak for '{habit_name}': {longest_streak_single_habit(habit)}{Style.RESET_ALL}")
+            else:
+                print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+
+    def longest_streak_all_habits(self):
+        '''Get the habit with the longest streak.'''
+        max_streak = 0
+        habit_with_max_streak = None
+
+        for habit in self.habit_list:
+            current_streak = streak_calc(habit)
+            if current_streak > max_streak:
+                max_streak = current_streak
+                habit_with_max_streak = habit.name
+
+        return habit_with_max_streak, max_streak
+
+    def longest_streak_single_habit(self, habit_name):
+        '''Get the longest streak for a given habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            print(f"{Fore.YELLOW}Current streak for habit '{habit_name}': {streak_calc(habit)}{Style.RESET_ALL}")
+            max_streak = streak_calc(habit)
+            return max_streak
         else:
             print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+            return None
+
+    def all_habits(self):
+        '''Get all habits.'''
+        all_habits = get_all_habits(self.habit_list)
+        print(f"{Fore.WHITE}Total habits: {len(all_habits)}{Style.RESET_ALL}")
+        for habit in all_habits:
+            print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}, {Fore.CYAN}Periodicity: {habit.periodicity}{Style.RESET_ALL})")
 
     def filter(self, periodicity):
         '''Filter habits by periodicity and print them.'''
         filtered_habits = habits_filter(self.habit_list, periodicity)
+        print(f"{Fore.WHITE}Total habits with {periodicity} periodicity: {len(filtered_habits)}{Style.RESET_ALL}")
         for habit in filtered_habits:
-            print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description})")
+            print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}{Style.RESET_ALL})")
 
     def completion_rates(self):
         '''Calculate and print the completion rates for all habits.'''
