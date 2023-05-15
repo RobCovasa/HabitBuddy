@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 def streak_calc(habit):
     '''Function to calculate the longest streak for a given habit.'''
