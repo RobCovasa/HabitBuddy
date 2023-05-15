@@ -1,58 +1,56 @@
 from datetime import datetime, timedelta
 
 def streak_calc(habit):
-    '''Calculate the current streak of a habit'''
-    if not habit.completions:
-        return 0
-
-    def check_streak(current_date, completion_dates, delta_days):
-        if current_date in completion_dates:
-            return True, current_date - timedelta(days=delta_days)
-        else:
-            return False, current_date
-
+    '''Function to calculate the longest streak for a given habit.'''
     streak = 0
-    today = datetime.now().date()
-    current_date = today
-    # Get a set of completion dates
-    completion_dates = {completion.date() for completion in habit.completions}
-    
-    while current_date >= habit.start_date.date():
-        if habit.periodicity == "daily":
-            found, current_date = check_streak(current_date, completion_dates, 1)
-        elif habit.periodicity == "weekly":
-            week_start = current_date - timedelta(days=current_date.weekday())
-            found = any(week_start <= date <= current_date for date in completion_dates)
-            current_date = week_start - timedelta(days=1)
-        else:
-            raise ValueError("Invalid periodicity") # Raise an error if the periodicity is not supported
-        if found:
-            streak += 1
-        else:
-            break
-    return streak
+    max_streak = 0
+    prev_completion = None
+
+    for completion in sorted(habit.completions):
+        if prev_completion:
+            # habit == daily and the difference between the current and previous completion is 1 day, streak += 1
+            if habit.periodicity == 'daily' and (completion - prev_completion).days == 1:
+                streak += 1
+            # habit == weekly and the difference between the current and previous completion is 7 days, streak += 1
+            elif habit.periodicity == 'weekly' and (completion - prev_completion).days == 7:
+                streak += 1
+            else:
+                # If the difference between the current and previous completion is not 1 day or 7 days, reset the streak
+                streak = 1
+
+            # Update the maximum streak
+            if streak > max_streak:
+                max_streak = streak
+
+        prev_completion = completion
+
+    return max_streak
+
+def get_all_habits(habit_list):
+    '''Function to return a list of all habits.'''
+    return habit_list
 
 def habits_filter(habit_list, periodicity):
-    '''Filter habits by periodicity'''
-    return [habit for habit in habit_list if habit.periodicity == periodicity]
+    '''Function to return a list of habits filtered by periodicity.'''
+    return list(filter(lambda habit: habit.periodicity == periodicity, habit_list))
+
+def longest_streak_all_habits(habit_list):
+    '''Function to return the habit with the longest streak.'''
+    streaks = [(habit.name, streak_calc(habit)) for habit in habit_list]
+    return max(streaks, key=lambda x: x[1])
+
+def longest_streak_single_habit(habit):
+    '''Function to return the longest streak for a given habit.'''
+    return streak_calc(habit)
 
 def calculate_completion_rates(habit_list):
-    '''Calculate the completion rates of habits'''
-    completion_rates = []
-    
+    '''Function to calculate the completion rates for all habits.'''
+    rates = []
     for habit in habit_list:
-        total_days = (datetime.now().date() - habit.start_date.date()).days
-        if total_days <= 0:
-            # Skip if the habit start date is in the future or today
-            continue
-        
-        if habit.periodicity == "weekly":
-            total_days = total_days // 7
-        
+        total_days = (datetime.now().date() - habit.start_date.date()).days + 1
         completion_rate = (len(habit.completions) / total_days) * 100
-        completion_rates.append({
-            "habit_name": habit.name,
-            "completion_rate": completion_rate
+        rates.append({
+            'habit_name': habit.name,
+            'completion_rate': completion_rate
         })
-    
-    return completion_rates
+    return rates
