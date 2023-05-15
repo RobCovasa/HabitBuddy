@@ -1,6 +1,6 @@
 import fire
 from colorama import Fore, Style
-from datetime import datetime, timedelta
+from datetime import datetime
 from habit_manager import create_habit, edit_habit, delete_habit, get_habit_by_name
 from analytics import streak_calc, habits_filter, calculate_completion_rates, get_all_habits, calculate_longest_streak, longest_streak_all_habits
 from data_storage import load_info, save_info
