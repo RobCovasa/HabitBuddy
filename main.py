@@ -57,9 +57,9 @@ class HabitTrackerCLI:
                 start_date = datetime.fromisoformat(start_date)
             edit_habit(habit, name=name, description=description, start_date=start_date, periodicity=periodicity)
             save_info(self.habit_list, self.file_path)
-            print(f"{Fore.GREEN}Habit {Fore.CYAN}'{habit_name}'{Fore.GREEN} edited successfully{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}Habit {Fore.YELLOW}'{habit_name}'{Fore.CYAN} edited successfully{Style.RESET_ALL}")
         else:
-            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+            print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def delete(self, *habit_names): # Delete one or more habits at once
         '''Method to delete a habit with the given name.'''
@@ -72,26 +72,26 @@ class HabitTrackerCLI:
             if habit:
                 delete_habit(self.habit_list, habit)
                 save_info(self.habit_list, self.file_path)
-                print(f"{Fore.GREEN}Habit {Fore.YELLOW}{habit_name}{Fore.GREEN} deleted successfully{Style.RESET_ALL}")
+                print(f"{Fore.MAGENTA}Habit {Fore.YELLOW}{habit_name}{Fore.MAGENTA} deleted successfully{Style.RESET_ALL}")
             else:
-                print(f"{Fore.RED}Habit {Fore.YELLOWs}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+                print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def streak(self, habit_name):
         '''Method to get the current streak for a given habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
-            print(f"{Fore.YELLOW}Current streak for '{habit_name}': {streak_calc(habit)}{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}Current streak for '{habit_name}': {streak_calc(habit)}{Style.RESET_ALL}")
         else:
-            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+            print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
     
     def longest_streak(self, habit_name):
         '''Method to get the longest streak for a given habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
             longest_streak = calculate_longest_streak(habit)
-            print(f"{Fore.GREEN}Longest streak for {Fore.CYAN}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}")
         else:
-            print(f"{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
+            print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
             
     def longest_streak_all(self):
         '''Method to get the longest streak for all habits.'''
@@ -101,14 +101,14 @@ class HabitTrackerCLI:
     def all_habits(self):
         '''Method to print all habits.'''
         all_habits = get_all_habits(self.habit_list)
-        print(f"{Fore.WHITE}Total habits: {len(all_habits)}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Total habits: {len(all_habits)}{Style.RESET_ALL}")
         for habit in all_habits:
             print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}, {Fore.CYAN}Periodicity: {habit.periodicity}{Style.RESET_ALL})")
 
     def filter(self, periodicity):
         '''Method to filter habits by periodicity.'''
         filtered_habits = habits_filter(self.habit_list, periodicity)
-        print(f"{Fore.WHITE}Total habits with {periodicity} periodicity: {len(filtered_habits)}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Total habits with {periodicity} periodicity: {len(filtered_habits)}{Style.RESET_ALL}")
         for habit in filtered_habits:
             print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}{Style.RESET_ALL})")
 
