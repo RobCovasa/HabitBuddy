@@ -51,7 +51,16 @@ def calculate_completion_rates(habit_list):
     rates = []
     for habit in habit_list:
         total_days = (datetime.now().date() - habit.start_date.date()).days + 1
-        completion_rate = (len(habit.completions) / total_days) * 100
+        if habit.periodicity == 'daily':
+            completion_rate = (len(habit.completions) / total_days) * 100
+        elif habit.periodicity == 'weekly':
+            total_weeks = total_days // 7
+            if total_days % 7 > 0:  # if the habit has started within the week
+                total_weeks += 1
+            completion_rate = (len(habit.completions) / total_weeks) * 100 if total_weeks > 0 else 0
+        else:
+            completion_rate = 0  # undefined periodicity
+
         rates.append({
             'habit_name': habit.name,
             'completion_rate': completion_rate

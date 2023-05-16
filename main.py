@@ -117,10 +117,10 @@ class HabitTrackerCLI:
         if not self.habit_list:
             print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
             return
-
-        rates = calculate_completion_rates(self.habit_list)
-        for rate in rates:
-            print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
+        else:
+            rates = calculate_completion_rates(self.habit_list)
+            for rate in rates:
+                print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
 
     def complete(self, habit_name, completion_datetime=None):
         '''Method to mark a habit as complete.'''
