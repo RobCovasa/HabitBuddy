@@ -1,19 +1,18 @@
 from datetime import datetime, timedelta
 
 def streak_calc(habit):
-    """Function to calculate the current streak of a habit."""
+    '''Function to calculate the current streak of a habit.'''
     
     if len(habit.completions) == 0:
         return 0
-    
-    current_streak = 0
-    today = datetime.now()
-    for i in range(len(habit.completions)-1, -1, -1):
-        completion_date = habit.completions[i]
-        if today.date() - completion_date.date() > timedelta(days=1):
+
+    current_streak = 1
+    previous_completion = habit.completions[-1]
+    for completion_date in reversed(habit.completions[:-1]):
+        if (previous_completion.date() - completion_date.date()).days > 1:
             break
         current_streak += 1
-        today = completion_date
+        previous_completion = completion_date
 
     return current_streak
 
