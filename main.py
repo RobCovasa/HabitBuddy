@@ -17,7 +17,6 @@ class HabitTrackerCLI:
         # Check if a habit with the same name already exists
         existing_habit = get_habit_by_name(self.habit_list, name)
         
-        # If a habit with the same name exists, print an error message
         if existing_habit:
             print(f"{Fore.RED}A habit with the name {Fore.YELLOW}{name}{Fore.RED} already exists. Choose a different name.{Style.RESET_ALL}")
             return
@@ -50,7 +49,7 @@ class HabitTrackerCLI:
         print(f"{Fore.GREEN}Habit {Fore.YELLOW}{name}{Fore.GREEN} created successfully{Style.RESET_ALL}")
 
     def edit(self, habit_name, name=None, description=None, start_date=None, periodicity=None):
-        '''Method to edit a habit with the given name.'''
+        '''Method to edit a habit.'''
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
             if start_date:
@@ -59,11 +58,10 @@ class HabitTrackerCLI:
             save_info(self.habit_list, self.file_path)
             print(f"{Fore.CYAN}Habit {Fore.YELLOW}'{habit_name}'{Fore.CYAN} edited successfully{Style.RESET_ALL}")
         else:
-            # If the habit doesn't exist, print an error message
             raise Exception(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def delete(self, *habit_names): # Delete one or more habits at once
-        '''Method to delete a habit with the given name.'''
+        '''Method to delete a habit.'''
         if not habit_names:
             print(f"{Fore.RED}Provide at least one habit name to delete{Style.RESET_ALL}")
             return
@@ -86,7 +84,7 @@ class HabitTrackerCLI:
             return current_streak
         else:
             print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
-            raise Exception(f"{Fore.RED}Habit not found{Style.RESET_ALL}")  # Raise an exception when the habit doesn't exist
+            raise Exception(f"{Fore.RED}Habit not found{Style.RESET_ALL}")
     
     def longest_streak(self, habit_name):
         '''Method to get the longest streak for a given habit.'''
@@ -97,7 +95,7 @@ class HabitTrackerCLI:
             return longest_streak  # return the longest streak
         else:
             print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
-            raise Exception(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")  # raise an Exception if the habit doesn't exist
+            raise Exception(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
 
     def longest_streak_all(self):
         '''Method to get the longest streak for all habits.'''
