@@ -182,9 +182,15 @@ class HabitTrackerCLI:
                 break
             try:
                 fire.Fire({cmd: getattr(self, cmd) for cmd in dir(self) if not cmd.startswith('_')}, command_line)
+            # Catch ValueError if the command is invalid or the parameters are invalid
+            except ValueError as e:
+                print(f"{Fore.RED}Invalid command or parameters: {str(e)}{Style.RESET_ALL}")
+            # Catch AttributeError if the command is not found
+            except AttributeError as e:
+                print(f"{Fore.RED}Command not found: {str(e)}{Style.RESET_ALL}")
+            # Catch Exception for any other errors
             except Exception as e:
-                # If an error occurs, print the error message
-                print(f"{Fore.RED}Error: {str(e)}{Style.RESET_ALL}")
+                print(f"{Fore.RED}An unexpected error occurred: {str(e)}{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     cli = HabitTrackerCLI()
