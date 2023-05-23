@@ -81,7 +81,7 @@ class HabitTrackerCLI:
         if habit:
             current_streak = streak_calc(habit)
             print(f"{Fore.CYAN}Current streak for '{habit_name}': {current_streak}{Style.RESET_ALL}")
-            return current_streak
+            return
         else:
             print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
             raise Exception(f"{Fore.RED}Habit not found{Style.RESET_ALL}")
@@ -92,7 +92,7 @@ class HabitTrackerCLI:
         if habit:
             longest_streak = calculate_longest_streak(habit)
             print(f"{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}")
-            return longest_streak  # return the longest streak
+            return
         else:
             print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
             raise Exception(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
@@ -101,7 +101,7 @@ class HabitTrackerCLI:
         '''Method to get the longest streak for all habits.'''
         habit_with_max_streak, max_streak = longest_streak_all_habits(self.habit_list)
         print(f"{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is '{habit_with_max_streak}' with a streak of {max_streak} days.{Style.RESET_ALL}")
-        return habit_with_max_streak, max_streak
+        return
 
     def all_habits(self):
         '''Method to print all habits.'''
@@ -128,7 +128,7 @@ class HabitTrackerCLI:
             for rate in rates:
                 rate['completion_rate'] = round(rate['completion_rate'], 2)
                 print(f"{Fore.YELLOW}{rate['habit_name']}: {rate['completion_rate']:.2f}%{Style.RESET_ALL}")
-            return rates
+            return
 
     def complete(self, habit_name, completion_datetime=None):
         '''Method to mark a habit as complete.'''
@@ -168,7 +168,6 @@ class HabitTrackerCLI:
         print(f"{Fore.YELLOW}  completion_rates{Fore.WHITE} - Print the completion rates for all habits.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  welcome{Fore.WHITE} - Print the welcome message.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  help{Fore.WHITE} - Show this help message.{Style.RESET_ALL}")
-        print(f"{Fore.YELLOW}  run{Fore.WHITE} - Run the application.{Style.RESET_ALL}")
         print(f"{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}")
 
     def run(self):
