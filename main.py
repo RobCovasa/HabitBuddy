@@ -10,6 +10,12 @@ class HabitTrackerCLI:
     def __init__(self, file_path="habits.json"):
         self.file_path = file_path
         self.habit_list = load_info(file_path)
+        
+    def __str__(self):
+        return f"{self.name} ({self.description})"
+
+    def __repr__(self):
+        return self.__str__()
 
     def create(self, name, description, start_date, periodicity):
         '''Method to create a new habit with the given name, description, start date, and periodicity.'''
@@ -91,7 +97,10 @@ class HabitTrackerCLI:
         habit = get_habit_by_name(self.habit_list, habit_name)
         if habit:
             longest_streak = calculate_longest_streak(habit)
-            longest_streak_message = f"{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}"
+            if habit.periodicity == "daily":
+                longest_streak_message = f"{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}"
+            elif habit.periodicity == "weekly":
+                longest_streak_message = f"{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} weeks{Style.RESET_ALL}"
             return longest_streak_message  # Return the formatted message
         else:
             print(f"{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}")
@@ -100,9 +109,8 @@ class HabitTrackerCLI:
     def longest_streak_all(self):
         '''Method to get the longest streak for all habits.'''
         habit_with_max_streak, max_streak = longest_streak_all_habits(self.habit_list)
-        longest_streak_message = f"{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is '{habit_with_max_streak}' with a streak of {max_streak} days.{Style.RESET_ALL}"
-        print(longest_streak_message)
-        return habit_with_max_streak, max_streak  # Return the habit's name and its longest streak
+        longest_streak_message = f"{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is {Fore.YELLOW}'{habit_with_max_streak}'{Fore.GREEN} with a streak of {Fore.YELLOW}{max_streak}{Fore.GREEN} days.{Style.RESET_ALL}"
+        return longest_streak_message
 
     def all_habits(self):
         '''Method to print all habits.'''
@@ -115,14 +123,16 @@ class HabitTrackerCLI:
         '''Method to filter habits by periodicity.'''
         filtered_habits = habits_filter(self.habit_list, periodicity)
         print(f"{Fore.CYAN}Total habits with {periodicity} periodicity: {len(filtered_habits)}{Style.RESET_ALL}")
+        formatted_filters = []
         for habit in filtered_habits:
-            print(f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}{Style.RESET_ALL})")
-        return filtered_habits  # Return the filtered habits
+            formatted_filter = f"{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}, {Fore.CYAN}Periodicity: {habit.periodicity}{Style.RESET_ALL})"
+            formatted_filters.append(formatted_filter)
+        return formatted_filters
 
     def completion_rates(self):
         '''Method to calculate and return the completion rates for all habits.'''
         if not self.habit_list:
-            print(f"{Fore.RED}File not found or empty{Style.RESET_ALL}")
+            print(Fore.RED + "File not found or empty" + Style.RESET_ALL)
             return None
         else:
             rates = calculate_completion_rates(self.habit_list)
@@ -130,9 +140,9 @@ class HabitTrackerCLI:
             for rate in rates:
                 completion_rate = round(rate['completion_rate'], 2)
                 rate['completion_rate'] = completion_rate
-                formatted_rate = f"{Fore.YELLOW}{rate['habit_name']}: {Fore.WHITE}{completion_rate:.2f}%{Style.RESET_ALL}"
-                formatted_rates.append((formatted_rate, rate))  # Append a tuple of (formatted string, raw data)
-            return formatted_rates
+                formatted_rate = f"{Fore.YELLOW}{rate['habit_name']}{Fore.WHITE}: {Fore.GREEN}{completion_rate:.2f}%{Style.RESET_ALL}"
+                formatted_rates.append(formatted_rate)  # Append the formatted string
+            return formatted_rates  # return formatted data
 
     def complete(self, habit_name, completion_datetime=None):
         '''Method to mark a habit as complete.'''
