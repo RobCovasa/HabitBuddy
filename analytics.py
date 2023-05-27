@@ -6,13 +6,19 @@ def streak_calc(habit):
     if len(habit.completions) == 0:
         return 0
 
-    current_streak = 1
-    previous_completion = habit.completions[-1]
-    for completion_date in reversed(habit.completions[:-1]):
-        if (previous_completion.date() - completion_date.date()).days > 1:
+    current_date = datetime.now().date()
+    current_streak = 0
+
+    for completion_date in reversed(habit.completions):
+        if isinstance(completion_date, str):
+            completion_date = datetime.strptime(completion_date, "%Y-%m-%dT%H:%M:%S").date()
+        else:
+            completion_date = completion_date.date()
+        if (current_date - completion_date).days > 1:
             break
+
         current_streak += 1
-        previous_completion = completion_date
+        current_date = completion_date
 
     return current_streak
 
