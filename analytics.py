@@ -35,14 +35,27 @@ def calculate_longest_streak(habit):
     longest_streak = 1
     current_streak = 1
     completions = sorted([datetime.fromisoformat(completion) if isinstance(completion, str) else completion for completion in habit.completions])
-    for i in range(1, len(completions)):
-        if completions[i].date() - completions[i-1].date() == timedelta(days=1):
-            current_streak += 1
-        else:
-            current_streak = 1
-        
-        if current_streak > longest_streak:
-            longest_streak = current_streak
+
+    if habit.periodicity == "daily":
+        for i in range(1, len(completions)):
+            if completions[i].date() - completions[i-1].date() == timedelta(days=1):
+                current_streak += 1
+            else:
+                current_streak = 1
+            
+            if current_streak > longest_streak:
+                longest_streak = current_streak
+    elif habit.periodicity == "weekly":
+        current_week_start = completions[0].date()
+        for i in range(1, len(completions)):
+            if completions[i].date() - completions[i-1].date() == timedelta(days=7):
+                current_streak += 1
+            else:
+                current_streak = 1
+                current_week_start = completions[i].date()
+            
+            if current_streak > longest_streak:
+                longest_streak = current_streak
 
     return longest_streak
 
