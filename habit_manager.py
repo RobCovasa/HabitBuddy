@@ -7,6 +7,12 @@ class Habit:
         self.start_date = start_date
         self.periodicity = periodicity
         self.completions = []
+        
+    def __str__(self):
+        return f"{self.name} ({self.description})"
+
+    def __repr__(self):
+        return self.__str__()
 
     def complete_habit(self, completion_datetime=None):
         '''Mark a habit as complete.'''
