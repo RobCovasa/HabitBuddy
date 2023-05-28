@@ -46,18 +46,17 @@ def calculate_longest_streak(habit):
             if current_streak > longest_streak:
                 longest_streak = current_streak
     elif habit.periodicity == "weekly":
-        current_week_start = completions[0].date()
         for i in range(1, len(completions)):
             if completions[i].date() - completions[i-1].date() == timedelta(days=7):
                 current_streak += 1
             else:
                 current_streak = 1
-                current_week_start = completions[i].date()
-            
+
             if current_streak > longest_streak:
                 longest_streak = current_streak
 
     return longest_streak
+
 
 def longest_streak_all_habits(habit_list):
     '''Function to return the habit with the longest streak.'''
