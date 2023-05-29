@@ -6,27 +6,15 @@ from analytics import streak_calc, habits_filter, calculate_completion_rates, ge
 from data_storage import load_info, save_info
 
 class HabitTrackerCLI:
-    '''
-    Main class for Habit Tracker Command Line Interface.
-    This class handles user interaction from the command line, manipulating habits data as requested.
-    '''
     def __init__(self, file_path='habits.json'):
         '''
         Initialize HabitTrackerCLI object.
-
         Args:
             file_path (str): Path to the habit storage file.
         '''
         self.file_path = file_path
         self.habit_list = load_info(file_path)
-        
-    def __str__(self):
-        '''Return a string representation of the HabitTrackerCLI object.'''
-        return f'{self.name} ({self.description})'
-
-    def __repr__(self):
-        '''Return a string representation of the HabitTrackerCLI object.'''
-        return self.__str__()
+        self.welcome()
 
     def create(self, name, description, start_date, periodicity):
         '''
@@ -246,54 +234,18 @@ class HabitTrackerCLI:
         '''
         Display a welcome message along with the basic commands for using the HabitBuddy application.
         '''
-        print(f'{Fore.CYAN}Welcome to HabitBuddy!{Style.RESET_ALL}')
-        print(f'{Fore.WHITE}Here are the main commands:{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  help{Fore.WHITE} - Show information about the available commands.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}')
+        print(f'{Fore.CYAN}\nWelcome to HabitBuddy!\n{Style.RESET_ALL}')
 
-    def help(self):
-        '''
-        Display the available commands and their usage in the HabitBuddy application.
-        
-        Each command is explained with its function and, where applicable, its expected arguments.
-        '''
-        print(f'{Fore.WHITE}Available commands and their usage:{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  create <name> <description> <start_date> <periodicity>{Fore.WHITE} - Create a new habit.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  edit <habit_name> [name] [description] [start_date] [periodicity]{Fore.WHITE} - Edit an existing habit.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  delete <habit_name>{Fore.WHITE} - Delete a habit.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  complete <habit_name> [completion_datetime]{Fore.WHITE} - Mark a habit as complete.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  streak <habit_name>{Fore.WHITE} - Get the current streak for a habit.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  longest_streak_all{Fore.WHITE} - Get the habit with the longest streak.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  longest_streak <habit_name>{Fore.WHITE} - Get the longest streak for a given habit.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  all_habits{Fore.WHITE} - Get all habits.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  filter <periodicity>{Fore.WHITE} - Filter habits by periodicity.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  completion_rates{Fore.WHITE} - Print the completion rates for all habits.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  welcome{Fore.WHITE} - Print the welcome message.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  help{Fore.WHITE} - Show this help message.{Style.RESET_ALL}')
-        print(f'{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}')
 
     def run(self):
         '''The main loop of the CLI application.
-
         This method runs the welcome message, then loops infinitely until the user
         inputs 'exit'. Within the loop, it reads command line input and invokes the
         corresponding class methods. If any exceptions are raised, they are caught
         and the error messages are printed out.
         '''
         self.welcome()
-        while True:
-            command_line = input(f'{Fore.MAGENTA}> {Style.RESET_ALL}')
-            if command_line.lower() == 'exit':
-                break
-            try:
-                fire.Fire({cmd: getattr(self, cmd) for cmd in dir(self) if not cmd.startswith('_')}, command_line)
-            except ValueError as e:
-                print(f'{Fore.RED}Invalid command or parameters: {str(e)}{Style.RESET_ALL}')
-            except AttributeError as e:
-                print(f'{Fore.RED}Command not found: {str(e)}{Style.RESET_ALL}')
-            except Exception as e:
-                print(f'{Fore.RED}An unexpected error occurred: {str(e)}{Style.RESET_ALL}')
+        fire.Fire(self)
 
-if __name__ == '__main__':
-    cli = HabitTrackerCLI()
-    cli.run()
+if __name__ == "__main__":
+    fire.Fire(HabitTrackerCLI)
