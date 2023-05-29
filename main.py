@@ -82,7 +82,7 @@ class HabitTrackerCLI:
                 start_date = datetime.fromisoformat(start_date)
             edit_habit(habit, name=name, description=description, start_date=start_date, periodicity=periodicity)
             save_info(self.habit_list, self.file_path)
-            print(f'{Fore.CYAN}Habit {Fore.YELLOW}\'{habit_name}\'{Fore.CYAN} edited successfully{Style.RESET_ALL}')
+            print(f'{Fore.GREEN}Habit {Fore.YELLOW}{habit_name}{Fore.GREEN} edited successfully{Style.RESET_ALL}')
         else:
             raise Exception(f'{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}')
 
@@ -102,7 +102,7 @@ class HabitTrackerCLI:
             if habit:
                 delete_habit(self.habit_list, habit)
                 save_info(self.habit_list, self.file_path)
-                print(f'{Fore.MAGENTA}Habit {Fore.YELLOW}{habit_name}{Fore.MAGENTA} deleted successfully{Style.RESET_ALL}')
+                print(f'{Fore.GREEN}Habit {Fore.YELLOW}{habit_name}{Fore.GREEN} deleted successfully{Style.RESET_ALL}')
             else:
                 raise ValueError(f'{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}')
 
@@ -124,7 +124,7 @@ class HabitTrackerCLI:
             # Calculate current streak
             current_streak = streak_calc(habit)
             # Prepare the result string
-            r_current_streak = f'{Fore.CYAN}Current streak for {Fore.WHITE}\'{habit_name}\': {Fore.CYAN}{current_streak}{Style.RESET_ALL}'
+            r_current_streak = f'{Fore.GREEN}Current streak for {Fore.YELLOW}{habit_name}{Fore.GREEN}: {Fore.WHITE}{current_streak}{Style.RESET_ALL}'
             return r_current_streak
         else:
             print(f'{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}')
@@ -150,9 +150,9 @@ class HabitTrackerCLI:
             longest_streak = calculate_longest_streak(habit)
             # Prepare the result string depending on the habit's periodicity
             if habit.periodicity == 'daily':
-                longest_streak_message = f'{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} days{Style.RESET_ALL}'
+                longest_streak_message = f'{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {Fore.WHITE}{longest_streak}{Fore.GREEN} days{Style.RESET_ALL}'
             elif habit.periodicity == 'weekly':
-                longest_streak_message = f'{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {longest_streak} weeks{Style.RESET_ALL}'
+                longest_streak_message = f'{Fore.GREEN}Longest streak for {Fore.YELLOW}{habit_name}{Fore.GREEN} is {Fore.WHITE}{longest_streak}{Fore.GREEN} weeks{Style.RESET_ALL}'
             return longest_streak_message
         else:
             print(f'{Fore.RED}Habit {Fore.YELLOW}{habit_name}{Fore.RED} not found{Style.RESET_ALL}')
@@ -167,7 +167,7 @@ class HabitTrackerCLI:
         the length of the streak.
         '''
         habit_with_max_streak, max_streak = longest_streak_all_habits(self.habit_list)
-        longest_streak_message = f'{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is {Fore.YELLOW}\'{habit_with_max_streak}\'{Fore.GREEN} with a streak of {Fore.YELLOW}{max_streak}{Fore.GREEN} days.{Style.RESET_ALL}'
+        longest_streak_message = f'{Fore.GREEN}{Style.BRIGHT}The habit with the longest streak is {Fore.YELLOW}{habit_with_max_streak}{Fore.GREEN} with a streak of {Fore.WHITE}{max_streak}{Fore.GREEN} days.{Style.RESET_ALL}'
         return longest_streak_message
 
     def all_habits(self):
@@ -177,7 +177,7 @@ class HabitTrackerCLI:
         The method will output the total number of habits and the detailed information for each habit.
         '''
         all_habits = get_all_habits(self.habit_list)
-        print(f'{Fore.CYAN}Total habits: {len(all_habits)}{Style.RESET_ALL}')
+        print(f'{Fore.YELLOW}Total habits: {Fore.WHITE}{len(all_habits)}{Style.RESET_ALL}')
         for habit in all_habits:
             print(f'{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}, {Fore.CYAN}Periodicity: {habit.periodicity}{Style.RESET_ALL})')
 
@@ -192,7 +192,7 @@ class HabitTrackerCLI:
         list: A list of formatted strings for each habit that meets the filter condition.
         '''
         filtered_habits = habits_filter(self.habit_list, periodicity)
-        print(f'{Fore.CYAN}Total habits with {periodicity} periodicity: {len(filtered_habits)}{Style.RESET_ALL}')
+        print(f'{Fore.YELLOW}Total habits with {periodicity} periodicity: {Fore.WHITE}{len(filtered_habits)}{Style.RESET_ALL}')
         formatted_filters = []
         for habit in filtered_habits:
             formatted_filter = f'{Fore.YELLOW}{habit.name}{Style.RESET_ALL} ({habit.description}, {Fore.CYAN}Periodicity: {habit.periodicity}{Style.RESET_ALL})'
@@ -215,7 +215,7 @@ class HabitTrackerCLI:
             for rate in rates:
                 completion_rate = round(rate['completion_rate'], 2)
                 rate['completion_rate'] = completion_rate
-                formatted_rate = f"{Fore.YELLOW}{rate['habit_name']}{Fore.WHITE}: {Fore.GREEN}{completion_rate:.2f}%{Style.RESET_ALL}"
+                formatted_rate = f"{Fore.YELLOW}{rate['habit_name']}{Fore.WHITE}: {Fore.WHITE}{completion_rate:.2f}%{Style.RESET_ALL}"
                 formatted_rates.append(formatted_rate)
             return formatted_rates
 
@@ -238,7 +238,7 @@ class HabitTrackerCLI:
                 completion_datetime = datetime.now() # If no completion datetime is provided, use the current datetime
             habit.complete_habit(completion_datetime)
             save_info(self.habit_list, self.file_path)
-            print(f'{Fore.GREEN}Habit {Fore.CYAN}{habit_name}{Fore.GREEN} marked as complete{Style.RESET_ALL}')
+            print(f'{Fore.GREEN}Habit {Fore.YELLOW}{habit_name}{Fore.GREEN} marked as complete{Style.RESET_ALL}')
         else:
             print(f'{Fore.RED}Habit {Fore.CYAN}{habit_name}{Fore.RED} not found{Style.RESET_ALL}')
 
@@ -246,7 +246,7 @@ class HabitTrackerCLI:
         '''
         Display a welcome message along with the basic commands for using the HabitBuddy application.
         '''
-        print('Welcome to HabitBuddy!')
+        print(f'{Fore.CYAN}Welcome to HabitBuddy!{Style.RESET_ALL}')
         print(f'{Fore.WHITE}Here are the main commands:{Style.RESET_ALL}')
         print(f'{Fore.YELLOW}  help{Fore.WHITE} - Show information about the available commands.{Style.RESET_ALL}')
         print(f'{Fore.YELLOW}  exit{Fore.WHITE} - Quit the application.{Style.RESET_ALL}')
@@ -282,7 +282,7 @@ class HabitTrackerCLI:
         '''
         self.welcome()
         while True:
-            command_line = input(f'{Fore.BLUE}> {Style.RESET_ALL}')
+            command_line = input(f'{Fore.MAGENTA}> {Style.RESET_ALL}')
             if command_line.lower() == 'exit':
                 break
             try:
