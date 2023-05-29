@@ -71,30 +71,6 @@ class Habit:
         habit.completions = [datetime.fromisoformat(completion) for completion in habit_dict['completions']]  # Convert strings to datetime objects
         return habit
 
-    def get_past_completions(self, n):
-        '''
-        Retrieve the past n days or weeks of completions.
-
-        Args:
-            n (int): The number of past days or weeks for which to retrieve completions.
-
-        Returns:
-            list: A list of booleans where each element represents the completion status for a given day/week.
-        '''
-        completions = []
-        now = datetime.now()
-        for i in range(n):
-            # Depending on the periodicity, calculate the target date
-            if self.periodicity == 'daily':
-                target_date = now - timedelta(days=i)
-            elif self.periodicity == 'weekly':
-                target_date = now - timedelta(weeks=i)
-
-            # Check if the habit was completed on the target date
-            completion = any([x.date() == target_date.date() for x in self.completions])
-            completions.insert(0, completion)  # Add the completion status at the beginning of the list to maintain chronological order
-        return completions
-
 def create_habit(name, description, start_date, periodicity):
     '''
     Create a new Habit object and return it.
