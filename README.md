@@ -22,17 +22,15 @@ HabitBuddy is a user-friendly, simple-to-use application designed to assist indi
 ## 📥 Installation
 
 1.  Clone the repository
-
-bashCopy code
-
-`https://github.com/RobCovasa/HabitBuddy.git` 
+```
+https://github.com/RobCovasa/HabitBuddy.git
+```
 
 2.  Install the required packages
-
-bashCopy code
-
-`cd HabitBuddy
-pip install -r requirements.txt` 
+```
+cd HabitBuddy
+pip install -r requirements.txt
+```
 
 ## 📘 Basic Usage
 
@@ -45,109 +43,99 @@ pip install -r requirements.txt`
 ### 🆕 Creating a New Habit
 
 -   Run the following command:
-
-bashCopy code
-
-`python main.py create <name> <description> <start_date> <periodicity>` 
+```
+python main.py create <name> <description> <start_date> <periodicity>
+```
 
 -   For example:
-
-bashCopy code
-
-`python main.py create "Drink 8 glasses of water" "Drink 8 glasses of water per day" 2023-01-01 daily` 
+```
+python main.py create "Drink 8 glasses of water" "Drink 8 glasses of water per day" 2023-01-01 daily
+```
 
 ### ✏️ Editing a Habit
 
 -   Run the following command:
-
-bashCopy code
-
-`python main.py edit <habit_name> [--name <new_name>] [--description <new_description>] [--start_date <new_start_date>] [--periodicity <new_periodicity>]` 
+```
+python main.py edit <habit_name> [--name <new_name>] [--description <new_description>] [--start_date <new_start_date>] [--periodicity <new_periodicity>]
+```
 
 -   For example:
-
-bashCopy code
-
-`python main.py edit "Drink 8 glasses of water" --name "Drink 10 glasses of water" --description "Drink 10 glasses of water per day" --start_date 2023-02-01` 
+```
+python main.py edit "Drink 8 glasses of water" --name "Drink 10 glasses of water" --description "Drink 10 glasses of water per day" --start_date 2023-02-01
+```
 
 ### 🗑️ Deleting a Habit
 
 -   Run the following command:
-
-bashCopy code
-
-`python main.py delete <habit_name1> [<habit_name2> ...]` 
+```
+python main.py delete <habit_name1> [<habit_name2> ...]
+```
 
 -   For example:
-
-bashCopy code
-
-`python main.py delete "Drink 8 glasses of water" "Go for a 30-minute walk"` 
+```
+python main.py delete "Drink 8 glasses of water" "Go for a 30-minute walk"
+```
 
 ### 📈 Tracking Streaks
 
 -   To calculate and view the **current streak** for a specific habit, use the `streak` command:
-
-bashCopy code
-
-`python main.py streak <habit_name>` 
-
-markdownCopy code
-
-``- For example: `python main.py streak "Drink 8 glasses of water"` `` 
+```
+python main.py streak <habit_name>
+```
+- For example:
+```
+python main.py streak "Drink 8 glasses of water"
+```
 
 -   To calculate and view the **longest streak** for a specific habit, use the `longest_streak` command:
 
-bashCopy code
+```
+python main.py longest_streak <habit_name>
+```
 
-`python main.py longest_streak <habit_name>` 
-
-markdownCopy code
-
-``- For example: `python main.py longest_streak "Drink 8 glasses of water"` `` 
+For example:
+```
+python main.py longest_streak "Drink 8 glasses of water"
+```
 
 -   To calculate and view the **longest streak for all habits**, use the `longest_streak_all` command:
-
-bashCopy code
-
-`python main.py longest_streak_all` 
+```
+python main.py longest_streak_all
+```
 
 ### 👀 Viewing All Habits
 
 -   To view all your habits, use the following command:
-
-bashCopy code
-
-`python main.py all_habits` 
+```
+python main.py all_habits
+```
 
 ### 🔍 Filtering Habits
 
 -   To filter habits by periodicity, use the `filter` command:
-
-bashCopy code
-
-`python main.py filter <periodicity>` 
-
-markdownCopy code
-
-``- For example: `python main.py filter daily` `` 
+```
+python main.py filter <periodicity>
+```
+- For example:
+```
+python main.py filter daily
+```
 
 ### 💯 Viewing Completion Rates
 
 -   To view the completion rates of your habits, use the `completion_rates` command:
-
-bashCopy code
-
-`python main.py completion_rates` 
+```
+python main.py completion_rates
+```
 
 ### ✅ Marking a Habit as Complete
 
 -   To mark a habit as complete, use the `complete` command:
+```
+python main.py complete <habit_name> [--completion_datetime <completion_datetime>]
+```
+For example:
+```
+python main.py complete "Drink 8 glasses of water" --completion_datetime 2023-01-01T12:00:00
 
-bashCopy code
-
-`python main.py complete <habit_name> [--completion_datetime <completion_datetime>]` 
-
-luaCopy code
-
-``- For example: `python main.py complete "Drink 8 glasses of water" --completion_d``
+```
