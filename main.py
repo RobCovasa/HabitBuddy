@@ -232,20 +232,9 @@ class HabitTrackerCLI:
 
     def welcome(self):
         '''
-        Display a welcome message along with the basic commands for using the HabitBuddy application.
+        Display a welcome message.
         '''
         print(f'{Fore.CYAN}\nWelcome to HabitBuddy!\n{Style.RESET_ALL}')
-
-
-    def run(self):
-        '''The main loop of the CLI application.
-        This method runs the welcome message, then loops infinitely until the user
-        inputs 'exit'. Within the loop, it reads command line input and invokes the
-        corresponding class methods. If any exceptions are raised, they are caught
-        and the error messages are printed out.
-        '''
-        self.welcome()
-        fire.Fire(self)
 
 if __name__ == "__main__":
     fire.Fire(HabitTrackerCLI)
