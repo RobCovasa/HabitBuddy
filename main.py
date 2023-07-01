@@ -26,6 +26,10 @@ class HabitTrackerCLI:
             start_date (str): The date when the habit started, in ISO format or 'now'.
             periodicity (str): The frequency of the habit, either 'daily' or 'weekly'.
         '''
+        if not name or not description:
+            print(f'{Fore.RED}Habit name and description cannot be empty.{Style.RESET_ALL}')
+            return
+        
         existing_habit = get_habit_by_name(self.habit_list, name) # Check if a habit with the same name already exists
         if existing_habit:
             print(f'{Fore.RED}A habit with the name {Fore.YELLOW}{name}{Fore.RED} already exists. Choose a different name.{Style.RESET_ALL}')
