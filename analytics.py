@@ -16,6 +16,7 @@ def streak_calc(habit):
 
     current_date = datetime.now().date()
     current_streak = 0
+    streak_increment = 1 if habit.periodicity == 'daily' else 7
 
     for completion_date in reversed(habit.completions): # Iterate through completions in reverse order
         if isinstance(completion_date, str):
@@ -23,14 +24,13 @@ def streak_calc(habit):
         else:
             completion_date = completion_date.date()
 
-        if (current_date - completion_date).days > 1: # If the habit was not completed the previous day, break
+        if (current_date - completion_date).days > streak_increment: # If the habit was not completed the previous day or week, break
             break
 
-        current_streak += 1 # Increment streak if habit was completed the previous day
+        current_streak += 1 # Increment streak if habit was completed the previous day or week
         current_date = completion_date
 
     return current_streak
-
 
 def get_all_habits(habit_list):
     '''
