@@ -138,3 +138,10 @@ For example:
 ```
 python main.py complete "Drink 8 glasses of water" --completion_datetime 2023-01-01T12:00:00
 ```
+
+### 🧪 Running the Tests
+
+-   To run the tests, use the following command:
+```
+pytest test_module.py
+```
